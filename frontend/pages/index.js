@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default function Home() {
   const [tipoErro, setTipoErro] = useState('none');
   const [qubit, setQubit] = useState(0);
@@ -13,7 +15,7 @@ export default function Home() {
     setCarregando(true);
     setResultado(null);
     try {
-      const response = await axios.post('http://localhost:8000/quantum/simulate', {
+      const response = await axios.post(`${API_BASE_URL}/quantum/simulate`, {
         error: { type: tipoErro, qubit },
         shots
       });
@@ -27,7 +29,7 @@ export default function Home() {
   const gerarCircuito = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/quantum/circuit?error_type=${tipoErro}&error_qubit=${qubit}`
+        `${API_BASE_URL}/quantum/circuit?error_type=${tipoErro}&error_qubit=${qubit}`
       );
       setImagem(response.data.circuit_image);
     } catch (error) {
